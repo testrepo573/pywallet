@@ -1298,6 +1298,27 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
             Mnemonic.to_seed(mnemonic, passphrase))
 
     @staticmethod
+    def master_key_from_entropy_custom(entropy, passphrase=''):
+        """ Generates a master key from custom entropy.
+
+        Args:
+            entropy (bytes): custom entropy.
+            passphrase (str): An optional passphrase for the generated
+               mnemonic string.
+
+        Returns:
+            HDPrivateKey, str:
+                a tuple consisting of the master
+                private key and a mnemonic string from which the seed
+                can be recovered.
+        """
+        m = Mnemonic(language='english')
+        n = m.to_mnemonic(entropy)
+        return HDPrivateKey.master_key_from_seed(
+            Mnemonic.to_seed(n, passphrase)), n
+
+
+    @staticmethod
     def master_key_from_entropy(passphrase='', strength=128):
         """ Generates a master key from system entropy.
 
